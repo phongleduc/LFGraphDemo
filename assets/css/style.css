@@ -1,0 +1,150 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+body {
+    overflow-x: hidden;
+}
+a:hover {
+    text-decoration: none;
+}
+.box-container {
+    border: 1px solid #d9d9d9;
+}
+.box-container .container-fluid {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.drag-area, .drop-area {
+    padding: 15px;
+}
+.lfgraph-obj .lfgraph-header , .lfgraph-label {
+    cursor: move;
+}
+.drag-area .lfgraph-obj {
+    /* display: table; */
+    padding: 0;
+    width: auto;
+}
+.drag-area .lfgraph-content {
+    display: none !important;
+}
+.drop-area {
+    padding: 0;
+}
+.drop-area .lfgraph-obj {
+    margin: 15px 0;
+    height: auto !important;
+    flex: 1 100%;
+}
+.lfgraph-label {
+    padding: 10px;
+    margin: 0 5px;
+    background: #e0e0e0;
+    color: #333;
+}
+.drop-area .received .lfgraph-label {
+    display: none !important;
+}
+.drop-area .content-body {
+    display: none;
+}
+.drop-area .received .content-body {
+    display: block;
+}
+.drop-area .lfgraph-content {
+    border: 1px solid #d9d9d9;
+}
+.drop-area .content-body {
+    padding: 15px;
+    /* margin-top: 10px; */
+    background: white;
+}
+.drop-area .lfgraph-label {
+    display: none;
+}
+.lfgraph-header {
+    background: #e0e0e0;
+    color: #333;
+    height: 30px;
+}
+.sidebar-control {
+    float: right;
+    height: 100%;
+}
+.sidebar-control a {
+    display: inline-block;
+    cursor: pointer;
+    color: #333;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+}
+.minimize-btn .fa-minus {
+    display: none;
+}
+.minimize-btn.opened .fa-plus {
+    display: none;
+}
+.minimize-btn.opened .fa-minus {
+    display: block;
+}
+.gmaps {
+    height: 250px;
+    width: 100%;
+}
+.content-body p {
+    margin-bottom: 0;
+}
+.hidden {
+    display: none !important;
+}
+.show {
+    display: block !important;
+}
+.current-weather {
+    padding: 15px;
+    margin: 5px 0;
+    border: 1px solid #d9d9d9;
+}
+.plot-chart {
+    width:500px;
+    height:300px;
+}
+
+.tt-hint {
+    color: #999;
+    width: 430px;
+}
+
+.tt-dropdown-menu {
+    width: 422px;
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor {
+    color: #fff;
+    background-color: #0097cf;
+    cursor: pointer;
+}
+
+span.twitter-typeahead {
+    width: 100%;
+}

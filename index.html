@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/jquery.jqplot.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="icon" href="favicon.ico">
+    <title>Chart.js samples</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col box-container">
+                <div class="drag-area connected_sortable row">
+                    <div class="lfgraph-obj col" data-type="0">
+                        <div class="lfgraph-label">Map</div>
+                        <div class="lfgraph-content">
+                            <div class="lfgraph-header" id="maps">
+                                <div class="sidebar-control">
+                                    <a href="#" class="minimize-btn opened">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                        <i class="fa fa-minus" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="remove-btn">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="content-body">
+                                <form id="gmap_form" role="form">
+                                    <input type="text" id="gmap_geocoding_address" class="form-control" placeholder="Address..." autocomplete="off" />
+                                </form>
+                                <br>
+                                <div>
+                                    <div id="gmap_geocoding" class="gmaps"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lfgraph-obj col" data-type="1">
+                        <div class="lfgraph-label">Farm Infomation</div>
+                        <div class="lfgraph-content">
+                            <div class="lfgraph-header" id="farm_info">
+                                <div class="sidebar-control">
+                                    <a href="#" class="minimize-btn opened">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                        <i class="fa fa-minus" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="edit-btn">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="remove-btn">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="content-body">
+                                <div class="well padtop5 container">
+                                    <form class="forms ajax-form" id="farm-info" method="post" name="farm-info">
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="SOS Name Tooltip">SOS Name :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8 sos_name">
+                                                <p class="form-control-static"></p>
+                                                <input type="text" id="sos_name" class="form-control hidden" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="SOS Group Tooltip">SOS Group :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8">
+                                                <p class="form-control-static">Default Group</p>
+                                                <input type="text" id="sos_group" class="form-control hidden" value="Default Group">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="IP Address Tooltip">IP Address :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8">
+                                                <p class="form-control-static">localhost</p>
+                                                <input type="text" id="ip-addr" class="form-control hidden" value="localhost">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="Description Tooltip">Description :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8 description">
+                                                <p class="form-control-static"></p>
+                                                <input type="text" id="description" class="form-control hidden" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="Latitude Tooltip">Latitude :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8 latitude">
+                                                <p class="form-control-static"></p>
+                                                <input type="text" id="latitude" class="form-control hidden" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="Longitude Tooltip">Longitude :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8 longitude">
+                                                <p class="form-control-static"></p>
+                                                <input type="text" id="longitude" class="form-control hidden" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="Altitude Tooltip">Altitude :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8 altitude">
+                                                <p class="form-control-static"></p>
+                                                <input type="text" id="altitude" class="form-control hidden" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="Location Tooltip">Location :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8">
+                                                <p class="form-control-static"></p>
+                                                <input type="text" id="location" class="form-control hidden" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="SOS Queue Tooltip">SOS Queue :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8">
+                                                <p class="form-control-static">VSOS01-LISTENFIELD_REV_CMD</p>
+                                                <input type="text" id="sos_queue" class="form-control hidden" value="VSOS01-LISTENFIELD_REV_CMD">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="Ping Interval Tooltip">Ping Interval :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8">
+                                                <p class="form-control-static">300 Second</p>
+                                                <input type="text" id="ping_inter" class="form-control hidden" value="300 Second">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xs-5 col-sm-4 control-label fontbold">
+                                                <span class="hint--bottom hint--info hint--rounded" data-hint="Monitor Status Tooltip">Monitor Status :</span>
+                                            </label>
+                                            <div class="col-xs-7 col-sm-8">
+                                                <p class="form-control-static">Monitored</p>
+                                                <input type="text" id="monitor_stt" class="form-control hidden" value="Monitored">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-default hidden" id="edit_info_btn">Edit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 current-weather">
+                        <div class="text-center">
+                            <p>Current Weather</p>
+                        </div>
+                        <div class="row">
+                            <div class="lfgraph-obj col">
+                                <div class="lfgraph-label">Graph aver air temp</div>
+                                <div class="lfgraph-content">
+                                    <div class="lfgraph-header" id="graph">
+                                        <div class="sidebar-control">
+                                            <a href="#" class="minimize-btn opened">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="#" class="edit-btn">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="#" class="remove-btn">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="content-body">
+                                        <div id="chart1" class="plot-chart">
+                                            <input class="temp-num" type="hidden" value="13.9" />
+                                            <input class="temp-title" type="hidden" value="daily_average_air_temperature" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lfgraph-obj col">
+                                <div class="lfgraph-label">Graph max air temp</div>
+                                <div class="lfgraph-content">
+                                    <div class="lfgraph-header" id="graph">
+                                        <div class="sidebar-control">
+                                            <a href="#" class="minimize-btn opened">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="#" class="edit-btn">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="#" class="remove-btn">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="content-body">
+                                        <div id="chart2" class="plot-chart">
+                                            <input class="temp-num" type="hidden" value="18" />
+                                            <input class="temp-title" type="hidden" value="daily_maximum_air_temperature" />                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lfgraph-obj col">
+                                    <div class="lfgraph-label">Graph min air temp</div>
+                                    <div class="lfgraph-content">
+                                        <div class="lfgraph-header" id="graph">
+                                            <div class="sidebar-control">
+                                                <a href="#" class="minimize-btn opened">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </a>
+                                                <a href="#" class="edit-btn">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                </a>
+                                                <a href="#" class="remove-btn">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="content-body">
+                                            <div id="chart3" class="plot-chart">
+                                                <input class="temp-num" type="hidden" value="8" />
+                                                <input class="temp-title" type="hidden" value="daily_minimum_air_temperature" />                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <!-- <div id="chart4" class="plot-chart"></div> -->
+                </div>
+            </div>
+            <div class="col box-container">
+                <div class="drop-area connected_sortable h-100 row">
+                </div>
+            </div>
+        </div>
+        <div class="row box-container">
+            <div class="container-fluid">
+                <button class="btn btn-default pull-right" id="edit_drop_btn">Save</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+    <script src="assets/scripts/jquery-1.12.4.js"></script>
+    <script src="assets/scripts/jquery-ui.js"></script>
+    <script src="assets/scripts/chart.min.js"></script>
+    <script src="assets/scripts/gmaps.js"></script>
+    <script src="assets/scripts/typeahead.min.js"></script>
+    <script src="assets/scripts/typeahead-addresspicker.js"></script>
+    <script src="assets/scripts/jquery.jqplot.min.js"></script>
+    <script src="assets/scripts/jqplot.meterGaugeRenderer.js"></script>
+    <script src="assets/scripts/script.js"></script>
+
+</body>
+
+</html>
