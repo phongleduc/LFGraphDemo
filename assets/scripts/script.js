@@ -46,12 +46,12 @@ $(function () {
                             var gra = $(target).find('.plot-chart')[0].id;
                             var temp = $(target).find('.plot-chart .temp-num').val();
                             var title = $(target).find('.plot-chart .temp-title').val();
-                            var data = { "gra": gra, "temp": temp, "title": title };
+                            var data = {"gra": gra, "temp": temp, "title": title};
                             graphCurrentWeather.init(data);
                             break;
 
                         case "farm_info":
-                        // getJson.getFarmInfomation();
+                            getJson.getFarmInfomation();
 
                         default:
                             break;
@@ -60,19 +60,25 @@ $(function () {
             }).disableSelection();
 
             // Remove icon
-            $('body').on('click', '.remove-btn', function () {
+            $('body').on('click', '.remove-btn', function (e) {
+                e.preventDefault();
                 $(this).closest('.lfgraph-obj').remove();
             });
             // Edit icon
-            $('body').on('click', '.edit-btn', function () {
+            $('body').on('click', '.edit-btn', function (e) {
+                e.preventDefault();
                 var tag = $(this).closest('.lfgraph-obj');
+
                 tag.find('.content-body .form-control-static').addClass("hidden");
+                tag.find('.content-body #farm-info textarea').removeClass("hidden");
                 tag.find('.content-body #farm-info input').removeClass("hidden");
+                tag.find('.content-body #farm-info select').removeClass("hidden");
                 tag.find('.content-body #farm-info button').removeClass("hidden");
 
             });
             // Minimize icon
-            $('body').on('click', '.minimize-btn', function () {
+            $('body').on('click', '.minimize-btn', function (e) {
+                e.preventDefault();
                 var $this = $(this);
                 $this.toggleClass("opened");
                 $this.closest('.lfgraph-obj').find('.content-body').slideToggle();
@@ -88,15 +94,96 @@ $(function () {
             function updateMap(e) {
                 var maps = $(e).find('#gmap_geocoding')[0];
                 var addr = $(e).find('#gmap_geocoding_address')[0];
-                var data = { "maps": maps, "addr": addr };
+                var clr = $(e).find('.clear-btn')[0];
+                var data = { "maps": maps, "addr": addr, "clr": clr };
                 mapGeocoding.init(data);
             }
         }
+
     };
 
     var getJson = {
+        BASE_API : "http://cs.listenfield.com/WebAPIRequest.jsp",
+        getCookies: function (name) {
+            var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+            result && (result = JSON.parse(result[1]));
+            return result;
+        },
         getFarmInfomation: function () {
-            var BASE_API = "http://cs.listenfield.com/WebAPIRequest.jsp";
+            var farmInforCookiesObj = this.getCookies("FarmCookiesName");
+            if (farmInforCookiesObj == null) {
+                var param = {
+                    Key: "DyZiLXclctLZVtUpQOgESUv7b60",
+                    Cmd: "GET-FS-DESCRIBE",
+                    SOSName: "VSOS01.LISTENFIELD",
+                    FSName: "TOYO-OKA-63051",
+                    OutputType: "json"
+                };
+                var val;
+                $.ajax({
+                    type: "get",
+                    url: getJson.BASE_API,
+                    async: false,
+                    data: param,
+                    dataType: "json",
+                    success: function (data) {
+                        var val = data.BASEELEMENT.ELEMENT;
+                        $(".sos_group p").text(val.Group);
+                        $(".sos_select").val(val.Group);
+                        $(".sos_name p").text(val.NAME);
+                        $(".sos-name-input").val(val.NAME);
+                        $(".sos_queue p").text(val.Model);
+                        $(".sos-queue-input").val(val.Model);
+                        $(".ping_inter p").text(val.FeedInterval);
+                        $(".ping-inter-input").val(val.FeedInterval);
+                        $(".location p").text(val.Location);
+                        $(".location-input").val(val.Location);
+                        $(".altitude p").text(val.Altitude);
+                        $(".altitude-input").val(val.Altitude);
+                        $(".latitude p").text(val.Latitude);
+                        $(".latitude-input").val(val.Latitude);
+                        $(".longitude p").text(val.Longitude);
+                        $(".longitude-input").val(val.Longitude);
+                        $(".monitor_stt p").text(val.IsMonitored == "Y" ? "Monitored" : "Freedom");
+                        $(".monitor-stt-select").val(val.IsMonitored == "Y" ? "Monitored" : "Freedom");
+                        $(".platform-type-input").val(val.Type);
+                        $(".platformType p").text(val.Type);
+                        $(".description p").text(val.Description);
+                        $(".description-input").text(val.Description);
+
+                    },
+                    error: function (err) {
+                        console.log(jqXHR.responseText);
+                    }
+                });
+
+            } else {
+                $(".sos_group p").text(farmInforCookiesObj.sosGroup);
+                $(".sos_select").val(farmInforCookiesObj.sosGroup);
+                $(".sos_name p").text(farmInforCookiesObj.sosName);
+                $(".sos-name-input").val(farmInforCookiesObj.sosName);
+                $(".sos_queue p").text(farmInforCookiesObj.sosQueue);
+                $(".sos-queue-input").val(farmInforCookiesObj.sosQueue);
+                $(".ping_inter p").text(farmInforCookiesObj.pingInter);
+                $(".ping-inter-input").val(farmInforCookiesObj.pingInter);
+                $(".location p").text(farmInforCookiesObj.location);
+                $(".altitude p").text(farmInforCookiesObj.altitude);
+                $(".altitude-input").val(farmInforCookiesObj.altitude);
+                $(".latitude p").text(farmInforCookiesObj.latitude);
+                $(".latitude-input").val(farmInforCookiesObj.latitude);
+                $(".longitude p").text(farmInforCookiesObj.longitude);
+                $(".longitude-input").val(farmInforCookiesObj.longitude);
+                $(".monitor_stt p").text(farmInforCookiesObj.monitorStt == "Y" ? "Monitored" : "Freedom");
+                $(".monitor-stt-select").val(farmInforCookiesObj.monitorStt == "Y" ? "Monitored" : "Freedom");
+                $(".platform-type-input").val(farmInforCookiesObj.platformType);
+                $(".platformType p").text(farmInforCookiesObj.platformType);
+                $(".description p").text(farmInforCookiesObj.description);
+                $(".description-input").text(farmInforCookiesObj.description);
+                $(".ipAddr p").text(farmInforCookiesObj.ipAddr);
+                $(".ip-addr-input").val(farmInforCookiesObj.ipAddr);
+            }
+        },
+        getDataMap: function () {
             var param = {
                 Key: "DyZiLXclctLZVtUpQOgESUv7b60",
                 Cmd: "GET-FS-DESCRIBE",
@@ -107,7 +194,7 @@ $(function () {
             var val;
             $.ajax({
                 type: "get",
-                url: BASE_API,
+                url: getJson.BASE_API,
                 async: false,
                 data: param,
                 dataType: "json",
@@ -122,48 +209,12 @@ $(function () {
         }
     }
 
-    // var chartHandler = {
-    //     createLineChart: function (canvas) {
-    //         var ctx = canvas.getContext('2d');
-    //         ctx.canvas.width = 500;
-    //         ctx.canvas.height = 250;
-    //         var chart = new Chart(ctx, {
-    //             type: 'line',
-    //             data: {
-    //                 labels: ["January", "February", "March", "April", "May", "June", "July"]
-    //                 // datasets: [{
-    //                 //     label: "My First dataset",
-    //                 //     backgroundColor: 'transparent',
-    //                 //     borderColor: 'rgb(255, 99, 132)',
-    //                 //     data: [0, 10, 5, 2, 20, 30, 45],
-    //                 // }]
-    //             },
-    //             options: {
-    //                 scales: {
-    //                     yAxes: [{
-    //                         ticks: {
-    //                             beginAtZero: true
-    //                         }
-    //                     }]
-    //                 }
-    //             }
-    //         });
-    //     }
-    // };
-
-    // var createCharts = {
-    //     init: function () {
-    //         // Create line chart
-    //         chartHandler.createLineChart(document.querySelector('.chart-canvas'));
-    //     }
-    // }
-
     var mapGeocoding = {
         init: function (data) {
             var map;
             var geocoder = new google.maps.Geocoder();
             var addressPicker = new AddressPicker();
-            var val = getJson.getFarmInfomation();
+            var val = getJson.getDataMap();
 
             if (val.Latitude == "" && val.Longitude == "") {
                 GMaps.geolocate({
@@ -216,6 +267,7 @@ $(function () {
                                         // infowindow.setContent(event.formatted_address + "<br>coordinates: " + event.getPosition().toUrlValue(6));
                                         // infowindow.open(map, event);
                                         $(data.addr).val(event.formatted_address);
+                                        $(data.clr).removeClass('hidden');
                                     });
                                 }
                             });
@@ -224,7 +276,7 @@ $(function () {
                     }
                 });
             }
-            
+
             $(data.addr).keypress(function (e) {
                 var keycode = (e.keyCode ? e.keyCode : e.which);
                 if (keycode == '13') {
@@ -255,11 +307,30 @@ $(function () {
                                 event.formatted_address = 'Cannot determine address at this location.';
                             }
                             $(data.addr).val(event.formatted_address);
+                            $(data.clr).removeClass('hidden');
                         });
                     }
                 });
                 map.setCenter(lat, lon);
             };
+
+            function checkForInput(element) {
+                if ($(element).val().length > 0) {
+                    $(data.clr).removeClass('hidden');
+                }
+            }
+
+            $(data.clr).click(function () {
+                $(this).addClass('hidden');
+            });
+
+            $(data.addr).each(function () {
+                checkForInput(this);
+            });
+
+            $(data.addr).on('change keyup', function () {
+                checkForInput(this);
+            });
         }
     }
 
@@ -299,10 +370,156 @@ $(function () {
         }
     }
 
+    var farmInformationHandler = {
+        init: function () {
+            // Apply button
+            $('body').on('click', '.apply-btn', function (e) {
+                e.preventDefault();
+                farmInformationHandler.farmInforApply($(this), 0);
+            });
+        },
+        farmInforApply: function (btn, isSave) {
+            //validation form
+            var farmIsvalid = farmInformationHandler.ValidationForm(btn, isSave);
+            if (!farmIsvalid) {
+                return farmIsvalid;
+            }
+
+            $('.content-body .form-control-static').removeClass("hidden");
+            $('.content-body #farm-info textarea').addClass("hidden");
+            $('.content-body #farm-info input').addClass("hidden");
+            $('.content-body #farm-info select').addClass("hidden");
+            $('.content-body #farm-info button').addClass("hidden");
+            $('.ipAddrTitle').show();
+            //$('.show-message-apply').show();
+
+            return farmInformationHandler.ApplyClickFarmInfor(btn, isSave);
+        },
+        ValidationForm: function (btn, isSave) {
+            var isValid = true;
+            var form = btn.closest('form');
+            if (!farmInformationHandler.ValidEle(form.find('.sos-name-input')[isSave], false)
+                // || !farmInformationHandler.ValidEle($('#ip-addr')[0], false)
+                || !farmInformationHandler.ValidEle($('.latitude-input')[isSave], true)
+                || !farmInformationHandler.ValidEle($('.longitude-input')[isSave], true)
+                || !farmInformationHandler.ValidEle($('.altitude-input')[isSave], false)
+                || !farmInformationHandler.ValidEle($('.location-input')[isSave], false)
+                || !farmInformationHandler.ValidEle($('.sos-queue-input')[isSave], false)
+                || !farmInformationHandler.ValidEle($('.ping-inter-input')[isSave], false)) {
+                isValid = false;
+            }
+            return isValid;
+        },
+        ValidEle: function (element, isnumber) {
+            var isValid = true;
+            if (!isnumber) {
+                if (!element.value) {
+                    element.style.border = "solid 1px #DF013A";
+                    isValid = false;
+                } else {
+                    element.style.border = "solid 1px #ced4da";
+                }
+            } else {
+                if (parseFloat(element.value) == NaN) {
+                    element.style.border = "solid 1px #DF013A";
+                    isValid = false;
+                } else {
+                    element.style.border = "solid 1px #ced4da";
+                }
+            }
+            return isValid;
+        },
+        GetValueEle: function (idElement) {
+            return document.getElementById(idElement);
+        },
+        ApplyClickFarmInfor: function (btn, isSave) {
+            var form = btn.closest('form');
+            var farmInforObj = {
+                'sosName': form.find('.sos-name-input')[isSave].value,
+                'sosGroup': form.find('.sos_select')[isSave].value,
+                'ipAddr': form.find('.ip-addr-input')[isSave].value,
+                'description': form.find('.description-input')[isSave].value,
+                'latitude': form.find('.latitude-input')[isSave].value,
+                'longitude': form.find('.longitude-input')[isSave].value,
+                'altitude': form.find('.altitude-input')[isSave].value,
+                'location': form.find('.location-input')[isSave].value,
+                'sosQueue': form.find('.sos-queue-input')[isSave].value,
+                'pingInter': form.find('.ping-inter-input')[isSave].value,
+                'monitorStt': form.find('.monitor-stt-select')[isSave].value,
+                'platformType': form.find('.platform-type-input')[isSave].value
+            }
+
+            $(".sos_group p").text(farmInforObj.sosGroup);
+            $(".sos_select").val(farmInforObj.sosGroup);
+            $(".sos_name p").text(farmInforObj.sosName);
+            $(".sos-name-input").val(farmInforObj.sosName);
+            $(".sos_queue p").text(farmInforObj.sosQueue);
+            $(".sos-queue-input").val(farmInforObj.sosQueue);
+            $(".ping_inter p").text(farmInforObj.pingInter);
+            $(".ping-inter-input").val(farmInforObj.pingInter);
+            $(".location p").text(farmInforObj.location);
+            $(".altitude p").text(farmInforObj.altitude);
+            $(".altitude-input").val(farmInforObj.altitude);
+            $(".latitude p").text(farmInforObj.latitude);
+            $(".latitude-input").val(farmInforObj.latitude);
+            $(".longitude p").text(farmInforObj.longitude);
+            $(".longitude-input").val(farmInforObj.longitude);
+            $(".monitor_stt p").text(farmInforObj.monitorStt == "Y" ? "Monitored" : "Freedom");
+            $(".monitor-stt-select").val(farmInforObj.monitorStt == "Y" ? "Monitored" : "Freedom");
+            $(".platform-type-input").val(farmInforObj.platformType);
+            $(".platformType p").text(farmInforObj.platformType);
+            $(".description p").text(farmInforObj.description);
+            $(".description-input").text(farmInforObj.description);
+            $(".ipAddr p").text(farmInforObj.ipAddr);
+            $(".ip-addr-input").val(farmInforObj.ipAddr);
+
+            return farmInforObj;
+        },
+        fISave: function (cname, cvalue, exdays) {
+            //expire old cookies
+            UtilitiesGlobal.setCookies(cname, cvalue, -1);
+            //save farm infor to cookies
+            UtilitiesGlobal.setCookies(cname, cvalue, exdays);
+        },
+        getCookies: function (name) {
+            return UtilitiesGlobal.getCookies(name);
+        },
+        fISaveInit: function () {
+            var checkValid = farmInformationHandler.farmInforApply($('.apply-btn'), 1);
+            if (!checkValid) {
+                return checkValid;
+            }
+            $('.show-message-apply').show().hide(3000);
+            farmInformationHandler.fISave(farmInformationHandler.GetNameCookies(), checkValid, 1);
+        },
+        GetNameCookies: function () {
+            return "FarmCookiesName";
+        }
+    };
+
+    var UtilitiesGlobal = {
+        setCookies: function (cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 60 * 60 * 1000));//* 24
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + JSON.stringify(cvalue) + ";" + expires + ";path=/";
+        },
+        getCookies: function (name) {
+            var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+            result && (result = JSON.parse(result[1]));
+            return result;
+        }
+    };
+
     $(document).ready(function () {
         dragHandler.init();
+        farmInformationHandler.init();
+        getJson.getFarmInfomation();
         // createCharts.init();
         // mapGeocoding.init();
         // getJson.init();
+
+        //request ajax get api bind to Farm information
+        $('.show-message-apply').hide();
     });
 });
