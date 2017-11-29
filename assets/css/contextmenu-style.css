@@ -1,0 +1,43 @@
+.iconTab {
+	BORDER-BOTTOM: #b0c4e0 1px solid; BORDER-LEFT: #b0c4e0 1px solid; BORDER-TOP: #b0c4e0 1px solid; BORDER-RIGHT: #b0c4e0 1px solid
+}
+.iconTab-head {
+	BORDER-LEFT: #b0c4e0 1px solid; BACKGROUND-COLOR: #f4f8fe; PADDING-LEFT: 10px; FONT-FAMILY: verdana; HEIGHT: 24px; COLOR: #000000; FONT-SIZE: 11px; VERTICAL-ALIGN: middle; BORDER-TOP: #b0c4e0 1px solid; FONT-WEIGHT: bold; BORDER-RIGHT: #b0c4e0 1px solid
+}
+.skin0 {
+	Z-INDEX: 100; BORDER-BOTTOM: #000000 1px solid; POSITION: absolute; BORDER-LEFT: #000000 1px solid; LINE-HEIGHT: 18px; BACKGROUND-COLOR: #f5f5f5; WIDTH: 135px; FONT-FAMILY: Verdana, verdana, Helvetica, sans-serif; VISIBILITY: hidden; COLOR: #4d2f49; FONT-SIZE: 10px; BORDER-TOP: #000000 1px solid; CURSOR: hand; BORDER-RIGHT: #000000 1px solid
+}
+.menuitems {
+	PADDING-LEFT: 10px; WIDTH: auto; PADDING-RIGHT: 10px
+}
+.skin1 {
+	Z-INDEX: 100; BORDER-BOTTOM: #000000 1px solid; POSITION: absolute; BORDER-LEFT: #000000 1px solid; LINE-HEIGHT: 18px; BACKGROUND-COLOR: #f5f5f5; PADDING-LEFT: 10px; WIDTH: 230px; PADDING-RIGHT: 10px; FONT-FAMILY: Verdana, verdana, Helvetica, sans-serif; VISIBILITY: hidden; COLOR: #4d2f49; FONT-SIZE: 10px; BORDER-TOP: #000000 1px solid; CURSOR: hand; FONT-WEIGHT: 700; BORDER-RIGHT: #000000 1px solid
+}
+.jsdomenudiv {
+	Z-INDEX: 10; BORDER-BOTTOM: #000000 2px outset; POSITION: absolute; BORDER-LEFT: #ffffff 2px outset; BACKGROUND-COLOR: #f5f5f5; VISIBILITY: hidden; BORDER-TOP: #ffffff 2px outset; CURSOR: default; BORDER-RIGHT: #000000 2px outset
+}
+.jsdomenuitem {
+	BORDER-BOTTOM: medium none; POSITION: relative; BORDER-LEFT: medium none; PADDING-BOTTOM: 2px; BACKGROUND-COLOR: transparent; PADDING-LEFT: 22px; PADDING-RIGHT: 15px; FONT-FAMILY: Tahoma, Helvetica, sans, verdana, sans-serif; COLOR: #4d2f49; FONT-SIZE: 12px; BORDER-TOP: medium none; BORDER-RIGHT: medium none; PADDING-TOP: 2px
+}
+.jsdomenuitemover {
+	BORDER-BOTTOM: medium none; POSITION: relative; BORDER-LEFT: medium none; PADDING-BOTTOM: 2px; BACKGROUND-COLOR: #dadada; PADDING-LEFT: 22px; PADDING-RIGHT: 15px; FONT-FAMILY: Tahoma, Helvetica, sans, verdana, sans-serif; COLOR: #000000; FONT-SIZE: 12px; BORDER-TOP: medium none; BORDER-RIGHT: medium none; PADDING-TOP: 2px
+}
+.jsdomenuarrow {
+	BACKGROUND-IMAGE: url(../../../Themes/VogueTree/Blue/images/classic_arrow.png); POSITION: absolute; WIDTH: 4px; BACKGROUND-REPEAT: no-repeat; HEIGHT: 7px; RIGHT: 8px
+}
+.jsdomenuarrowover {
+	BACKGROUND-IMAGE: url(../../../Themes/VogueTree/Blue/images/classic_arrow.png); POSITION: absolute; WIDTH: 4px; BACKGROUND-REPEAT: no-repeat; HEIGHT: 7px; RIGHT: 8px
+}
+.jsdomenusep {
+	
+}
+.jsdomenusep HR {
+	TEXT-ALIGN: center; WIDTH: 95%
+}
+.jsdomenuDisable {
+	BORDER-BOTTOM: medium none; POSITION: relative; BORDER-LEFT: medium none; PADDING-BOTTOM: 2px; BACKGROUND-COLOR: transparent; PADDING-LEFT: 22px; PADDING-RIGHT: 15px; FONT-FAMILY: Tahoma, Helvetica, sans, verdana, sans-serif; COLOR: gray; FONT-SIZE: 12px; BORDER-TOP: medium none; BORDER-RIGHT: medium none; PADDING-TOP: 2px
+}
+.jsdomenuitemoverDisable {
+	BORDER-BOTTOM: medium none; POSITION: relative; BORDER-LEFT: medium none; PADDING-BOTTOM: 2px; BACKGROUND-COLOR: #dadada; PADDING-LEFT: 22px; PADDING-RIGHT: 15px; FONT-FAMILY: Tahoma, Helvetica, sans, verdana, sans-serif; COLOR: #000000; FONT-SIZE: 12px; BORDER-TOP: medium none; BORDER-RIGHT: medium none; PADDING-TOP: 2px
+}
+

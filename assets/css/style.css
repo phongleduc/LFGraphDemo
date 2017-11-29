@@ -148,3 +148,30 @@ a:hover {
 span.twitter-typeahead {
     width: 100%;
 }
+
+#gmap_form{
+    position: relative;
+}
+#gmap_form input[type=text]{
+    padding-right: 24px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.clear-btn{
+    position: absolute;
+    right:0; top:0;
+    padding: 0 8px;
+    font-style: normal;
+    font-size: 23px;
+    user-select: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.clear-btn:focus{
+    outline: none; 
+}
+
+#gmap_form input::-ms-clear {  /* Remove IE default X */
+    display: none;
+}
