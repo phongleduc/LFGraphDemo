@@ -46,12 +46,12 @@ $(function () {
                             var gra = $(target).find('.plot-chart')[0].id;
                             var temp = $(target).find('.plot-chart .temp-num').val();
                             var title = $(target).find('.plot-chart .temp-title').val();
-                            var data = {"gra": gra, "temp": temp, "title": title};
-                            graphCurrentWeather.init(data);
+                            var data = { "gra": gra, "temp": temp, "title": title };
+                            graphCurrentWeather.init(gra, temp, title);
                             break;
 
                         case "farm_info":
-                            getJson.getFarmInfomation();
+                            farmInformationHandler.init();
 
                         default:
                             break;
@@ -103,86 +103,7 @@ $(function () {
     };
 
     var getJson = {
-        BASE_API : "http://cs.listenfield.com/WebAPIRequest.jsp",
-        getCookies: function (name) {
-            var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
-            result && (result = JSON.parse(result[1]));
-            return result;
-        },
-        getFarmInfomation: function () {
-            var farmInforCookiesObj = this.getCookies("FarmCookiesName");
-            if (farmInforCookiesObj == null) {
-                var param = {
-                    Key: "DyZiLXclctLZVtUpQOgESUv7b60",
-                    Cmd: "GET-FS-DESCRIBE",
-                    SOSName: "VSOS01.LISTENFIELD",
-                    FSName: "TOYO-OKA-63051",
-                    OutputType: "json"
-                };
-                var val;
-                $.ajax({
-                    type: "get",
-                    url: getJson.BASE_API,
-                    async: false,
-                    data: param,
-                    dataType: "json",
-                    success: function (data) {
-                        var val = data.BASEELEMENT.ELEMENT;
-                        $(".sos_group p").text(val.Group);
-                        $(".sos_select").val(val.Group);
-                        $(".sos_name p").text(val.NAME);
-                        $(".sos-name-input").val(val.NAME);
-                        $(".sos_queue p").text(val.Model);
-                        $(".sos-queue-input").val(val.Model);
-                        $(".ping_inter p").text(val.FeedInterval);
-                        $(".ping-inter-input").val(val.FeedInterval);
-                        $(".location p").text(val.Location);
-                        $(".location-input").val(val.Location);
-                        $(".altitude p").text(val.Altitude);
-                        $(".altitude-input").val(val.Altitude);
-                        $(".latitude p").text(val.Latitude);
-                        $(".latitude-input").val(val.Latitude);
-                        $(".longitude p").text(val.Longitude);
-                        $(".longitude-input").val(val.Longitude);
-                        $(".monitor_stt p").text(val.IsMonitored == "Y" ? "Monitored" : "Freedom");
-                        $(".monitor-stt-select").val(val.IsMonitored == "Y" ? "Monitored" : "Freedom");
-                        $(".platform-type-input").val(val.Type);
-                        $(".platformType p").text(val.Type);
-                        $(".description p").text(val.Description);
-                        $(".description-input").text(val.Description);
-
-                    },
-                    error: function (err) {
-                        console.log(jqXHR.responseText);
-                    }
-                });
-
-            } else {
-                $(".sos_group p").text(farmInforCookiesObj.sosGroup);
-                $(".sos_select").val(farmInforCookiesObj.sosGroup);
-                $(".sos_name p").text(farmInforCookiesObj.sosName);
-                $(".sos-name-input").val(farmInforCookiesObj.sosName);
-                $(".sos_queue p").text(farmInforCookiesObj.sosQueue);
-                $(".sos-queue-input").val(farmInforCookiesObj.sosQueue);
-                $(".ping_inter p").text(farmInforCookiesObj.pingInter);
-                $(".ping-inter-input").val(farmInforCookiesObj.pingInter);
-                $(".location p").text(farmInforCookiesObj.location);
-                $(".altitude p").text(farmInforCookiesObj.altitude);
-                $(".altitude-input").val(farmInforCookiesObj.altitude);
-                $(".latitude p").text(farmInforCookiesObj.latitude);
-                $(".latitude-input").val(farmInforCookiesObj.latitude);
-                $(".longitude p").text(farmInforCookiesObj.longitude);
-                $(".longitude-input").val(farmInforCookiesObj.longitude);
-                $(".monitor_stt p").text(farmInforCookiesObj.monitorStt == "Y" ? "Monitored" : "Freedom");
-                $(".monitor-stt-select").val(farmInforCookiesObj.monitorStt == "Y" ? "Monitored" : "Freedom");
-                $(".platform-type-input").val(farmInforCookiesObj.platformType);
-                $(".platformType p").text(farmInforCookiesObj.platformType);
-                $(".description p").text(farmInforCookiesObj.description);
-                $(".description-input").text(farmInforCookiesObj.description);
-                $(".ipAddr p").text(farmInforCookiesObj.ipAddr);
-                $(".ip-addr-input").val(farmInforCookiesObj.ipAddr);
-            }
-        },
+        BASE_API: "http://cs.listenfield.com/WebAPIRequest.jsp",
         getDataMap: function () {
             var param = {
                 Key: "DyZiLXclctLZVtUpQOgESUv7b60",
@@ -335,14 +256,14 @@ $(function () {
     }
 
     var graphCurrentWeather = {
-        init: function (data) {
-            s1 = [data.temp];
+        init: function (gra ,temp ,title) {
+            s1 = [temp];
 
-            plot4 = $.jqplot(data.gra, [s1], {
+            plot4 = $.jqplot(gra, [s1], {
                 seriesDefaults: {
                     renderer: $.jqplot.MeterGaugeRenderer,
                     rendererOptions: {
-                        label: data.title,
+                        label: title,
                         labelPosition: 'bottom',
                         labelHeightAdjust: -5,
                         intervalOuterRadius: 85,
@@ -352,6 +273,7 @@ $(function () {
                     }
                 }
             });
+
         }
     }
 
@@ -377,6 +299,65 @@ $(function () {
                 e.preventDefault();
                 farmInformationHandler.farmInforApply($(this), 0);
             });
+
+            var farmInforCookiesObj = this.getCookies("FarmCookiesName");
+            if (farmInforCookiesObj == null) {
+                var val = getJson.getDataMap();
+
+                $(".sos_group p").text(val.Group);
+                $(".sos_select").val(val.Group);
+                $(".sos_name p").text(val.NAME);
+                $(".sos-name-input").val(val.NAME);
+                $(".sos_queue p").text(val.Model);
+                $(".sos-queue-input").val(val.Model);
+                $(".ping_inter p").text(val.FeedInterval);
+                $(".ping-inter-input").val(val.FeedInterval);
+                $(".location p").text(val.Location);
+                $(".location-input").val(val.Location);
+                $(".altitude p").text(val.Altitude);
+                $(".altitude-input").val(val.Altitude);
+                $(".latitude p").text(val.Latitude);
+                $(".latitude-input").val(val.Latitude);
+                $(".longitude p").text(val.Longitude);
+                $(".longitude-input").val(val.Longitude);
+                $(".monitor_stt p").text(val.IsMonitored == "Y" ? "Monitored" : "Freedom");
+                $(".monitor-stt-select").val(val.IsMonitored == "Y" ? "Monitored" : "Freedom");
+                $(".platform-type-input").val(val.Type);
+                $(".platformType p").text(val.Type);
+                $(".description p").text(val.Description);
+                $(".description-input").text(val.Description);
+
+            } else {
+                $(".sos_group p").text(farmInforCookiesObj.sosGroup);
+                $(".sos_select").val(farmInforCookiesObj.sosGroup);
+                $(".sos_name p").text(farmInforCookiesObj.sosName);
+                $(".sos-name-input").val(farmInforCookiesObj.sosName);
+                $(".sos_queue p").text(farmInforCookiesObj.sosQueue);
+                $(".sos-queue-input").val(farmInforCookiesObj.sosQueue);
+                $(".ping_inter p").text(farmInforCookiesObj.pingInter);
+                $(".ping-inter-input").val(farmInforCookiesObj.pingInter);
+                $(".location p").text(farmInforCookiesObj.location);
+                $(".altitude p").text(farmInforCookiesObj.altitude);
+                $(".altitude-input").val(farmInforCookiesObj.altitude);
+                $(".latitude p").text(farmInforCookiesObj.latitude);
+                $(".latitude-input").val(farmInforCookiesObj.latitude);
+                $(".longitude p").text(farmInforCookiesObj.longitude);
+                $(".longitude-input").val(farmInforCookiesObj.longitude);
+                $(".monitor_stt p").text(farmInforCookiesObj.monitorStt == "Y" ? "Monitored" : "Freedom");
+                $(".monitor-stt-select").val(farmInforCookiesObj.monitorStt == "Y" ? "Monitored" : "Freedom");
+                $(".platform-type-input").val(farmInforCookiesObj.platformType);
+                $(".platformType p").text(farmInforCookiesObj.platformType);
+                $(".description p").text(farmInforCookiesObj.description);
+                $(".description-input").text(farmInforCookiesObj.description);
+                $(".ipAddr p").text(farmInforCookiesObj.ipAddr);
+                $(".ip-addr-input").val(farmInforCookiesObj.ipAddr);
+            }
+
+        },
+        getCookies: function (name) {
+            var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+            result && (result = JSON.parse(result[1]));
+            return result;
         },
         farmInforApply: function (btn, isSave) {
             //validation form
@@ -513,8 +494,7 @@ $(function () {
 
     $(document).ready(function () {
         dragHandler.init();
-        farmInformationHandler.init();
-        getJson.getFarmInfomation();
+        // getJson.getFarmInfomation();
         // createCharts.init();
         // mapGeocoding.init();
         // getJson.init();
