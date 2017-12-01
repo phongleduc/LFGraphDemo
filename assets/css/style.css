@@ -1,3 +1,5 @@
+
+
 html, body {
     width: 100%;
     height: 100%;
@@ -169,9 +171,40 @@ span.twitter-typeahead {
     cursor: pointer;
 }
 .clear-btn:focus{
-    outline: none; 
+    outline: none;
 }
 
-#gmap_form input::-ms-clear {  /* Remove IE default X */
-    display: none;
+#gmap_form input::-ms-clear {  / Remove IE default X /
+display: none;
+}
+
+.footer {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 1000;
+    border-top-width: 1px;
+    border-top-style: solid;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-top-color: #C8C7CC;
+    padding: 10px;
+}
+
+.gm-style {
+    font: 400 11px Roboto, Arial, sans-serif;
+    text-decoration: none;
+}
+
+.gm-style img {
+    max-width: none;
+}
+
+.navbar {
+    display: inline;
+}
+
+.jsdomenusep * {
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
 }
