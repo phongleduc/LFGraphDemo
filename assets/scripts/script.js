@@ -8,6 +8,7 @@ $(function () {
 
             // Append html on drop area on pageload
             savePositions.init();
+            debugger
             if (localStorage.graphObjects) {
                 var localGraphObjects = JSON.parse(localStorage.graphObjects);
                 if (localGraphObjects.length) {
@@ -19,7 +20,18 @@ $(function () {
                             case "0":
                                 updateMap(dropArea);
                                 break;
-
+                            case "5":
+                                updateBarChart(dropArea);
+                                break;
+                            case "1":
+                                dragHandler.renderGau('.daily_average_air_temperature_class');
+                                break;
+                            case "2":
+                                dragHandler.renderGau('.daily_maximum_air_temperature_class');
+                                break;
+                            case "3":
+                                dragHandler.renderGau('.daily_minimum_air_temperature_class');
+                                break;
                             default:
                                 break;
                         }
@@ -31,28 +43,32 @@ $(function () {
                 handle: ".lfgraph-header",
                 revert: true,
                 receive: function (event, ui) {
+                    debugger
                     var target = $(event.toElement).closest('.lfgraph-obj');
                     target.addClass('received');
                     target.attr('data-index', dragHandler.objectIndex);
                     dragHandler.objectIndex++;
-
+                    target.attr('id', 'graph-' + dragHandler.objectIndex++);
                     var check = $(event.toElement).attr('id');
                     switch (check) {
                         case "maps":
                             updateMap(target);
                             break;
 
-                        case "graph":
-                            var gra = $(target).find('.plot-chart')[0].id;
-                            var temp = $(target).find('.plot-chart .temp-num').val();
-                            var title = $(target).find('.plot-chart .temp-title').val();
-                            var data = { "gra": gra, "temp": temp, "title": title };
-                            graphCurrentWeather.init(gra, temp, title);
+                        case "daily_maximum_air":
+                            dragHandler.renderGau('.daily_maximum_air_temperature_class', target);
                             break;
-
+                        case "daily_average_air":
+                            dragHandler.renderGau('.daily_average_air_temperature_class', target);
+                            break;
+                        case "daily_minimum_air":
+                            dragHandler.renderGau('.daily_minimum_air_temperature_class', target);
+                            break;
                         case "farm_info":
                             farmInformationHandler.init();
-
+                        case "bar-chart-precipitation":
+                            //do something
+                            barChartPreHandler.renderBarChart();
                         default:
                             break;
                     }
@@ -74,7 +90,6 @@ $(function () {
                 tag.find('.content-body #farm-info input').removeClass("hidden");
                 tag.find('.content-body #farm-info select').removeClass("hidden");
                 tag.find('.content-body #farm-info button').removeClass("hidden");
-
             });
             // Minimize icon
             $('body').on('click', '.minimize-btn', function (e) {
@@ -95,13 +110,79 @@ $(function () {
                 var maps = $(e).find('#gmap_geocoding')[0];
                 var addr = $(e).find('#gmap_geocoding_address')[0];
                 var clr = $(e).find('.clear-btn')[0];
-                var data = { "maps": maps, "addr": addr, "clr": clr };
+                var data = {"maps": maps, "addr": addr, "clr": clr};
                 mapGeocoding.init(data);
             }
+
+            function updateBarChart(e) {
+                barChartPreHandler.renderBarChart();
+            }
+        },
+        renderGau: function (className, target) {
+            debugger
+            var gra = $(target).find('.plot-chart')[0].id;
+            //get api
+            var temp = Math.round(Math.random() * 100);//$(target).find('.plot-chart .temp-num').val();
+            var title = className;//$(target).find('.plot-chart .temp-title').val();
+            //var data = {"gra": gra, "temp": temp, "title": title};
+            graphCurrentWeather.init(className, temp, title);
         }
 
     };
+    var barChartPreHandler = {
+        renderBarChart: function () {
+            //get api
+            var arrPreJson = [{'date': '27/11', 'data': 2}, {'date': '28/11', 'data': 6}, {
+                'date': '29/11',
+                'data': 7
+            }, {'date': '30/11', 'data': 3},
+                {'date': '01/12', 'data': 11}, {'date': '02/12', 'data': 5.2}, {'date': '03/12', 'data': 10}];
 
+            var s1 = [];
+            var ticks = [];
+
+            $.each(arrPreJson, function (key, value) {
+                s1.push(value.data);
+                ticks.push(value.date);
+            });
+            $.jqplot.config.enablePlugins = true;
+            plot1 = $(".chartBarPrecipitation").jqplot([s1], {
+                // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+                animate: !$.jqplot.use_excanvas,
+                seriesDefaults: {
+                    renderer: $.jqplot.BarRenderer,
+                    pointLabels: {show: true}
+                },
+                axes: {
+                    xaxis: {
+                        renderer: $.jqplot.CategoryAxisRenderer,
+                        ticks: ticks
+                    }
+                },
+                highlighter: {show: false}
+            });
+            //
+            // $('#charttesttt').bind('jqplotDataClick',
+            //     function (ev, seriesIndex, pointIndex, data) {
+            //         $('#info1ff').html('series: ' + seriesIndex + ', point: ' + pointIndex + ', data: ' + data);
+            //     }
+            // );
+
+            // var line1 = [['Nissan', 4],['Porche', 6],['Acura', 2],['Aston Martin', 5],['Rolls Royce', 6]];
+            //
+            // $('.chartBarPrecipitation').jqplot([line1], {
+            //     title:'Precipitation Chart on week',
+            //     seriesDefaults:{
+            //         renderer:$.jqplot.BarRenderer
+            //     },
+            //     axes:{
+            //         xaxis:{
+            //             renderer: $.jqplot.CategoryAxisRenderer
+            //         }
+            //     }
+            // });
+        }
+    };
     var getJson = {
         BASE_API: "http://cs.listenfield.com/WebAPIRequest.jsp",
         getDataMap: function () {
@@ -256,14 +337,14 @@ $(function () {
     }
 
     var graphCurrentWeather = {
-        init: function (gra ,temp ,title) {
+        init: function (className, temp, title) {
             s1 = [temp];
 
-            plot4 = $.jqplot(gra, [s1], {
+            plot4 = $(className).jqplot([s1], {
                 seriesDefaults: {
                     renderer: $.jqplot.MeterGaugeRenderer,
                     rendererOptions: {
-                        label: title,
+                        label: title + ' ' + temp,
                         labelPosition: 'bottom',
                         labelHeightAdjust: -5,
                         intervalOuterRadius: 85,
@@ -275,19 +356,28 @@ $(function () {
             });
 
         }
-    }
+    };
 
     var savePositions = {
         init: function () {
             $('#edit_drop_btn').on('click', function (e) {
+                debugger
                 var graphObjects = [];
                 $('.drop-area .lfgraph-obj').each(function () {
+                    debugger
                     if ($.inArray($(this).attr('data-type'), graphObjects) < 0) {
                         graphObjects.push($(this).attr('data-type'));
                     }
                 });
                 localStorage.graphObjects = JSON.stringify(graphObjects);
-                console.log(localStorage);
+                //console.log(localStorage);
+                //show model
+                //$('#modalShowMessageSave').modal('toggle');
+                $('#modalShowMessageSave').modal('show');
+                //$('#modalShowMessageSave').modal('hide');
+                setTimeout(function () {
+                    $('#modalShowMessageSave').modal('hide');
+                }, 1200);
             });
         }
     }
@@ -372,7 +462,6 @@ $(function () {
             $('.content-body #farm-info select').addClass("hidden");
             $('.content-body #farm-info button').addClass("hidden");
             $('.ipAddrTitle').show();
-            //$('.show-message-apply').show();
 
             return farmInformationHandler.ApplyClickFarmInfor(btn, isSave);
         },
@@ -498,8 +587,5 @@ $(function () {
         // createCharts.init();
         // mapGeocoding.init();
         // getJson.init();
-
-        //request ajax get api bind to Farm information
-        $('.show-message-apply').hide();
     });
 });
